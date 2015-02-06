@@ -1,6 +1,3 @@
-# ldid-win32
-Minimal ldid version by Ryan Petrich, edited to run on Windows
-
 ldid-win32
 =========
 
