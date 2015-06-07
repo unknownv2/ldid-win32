@@ -601,7 +601,7 @@ public:
 
 FatHeader Map(const char *path, bool ro = false) {
 	DWORD size;
-	HANDLE hFile = CreateFile(path, (GENERIC_READ | GENERIC_WRITE), FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE hFile = CreateFileA(path, (GENERIC_READ | GENERIC_WRITE), FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	size = GetFileSize(hFile, NULL);
 	HANDLE hMapFile;
 	hMapFile = CreateFileMapping(hFile, NULL, PAGE_READWRITE, 0, size, NULL);
@@ -611,7 +611,7 @@ FatHeader Map(const char *path, bool ro = false) {
 void * map(const char *path)
 {
 	DWORD size;
-	HANDLE hFile = CreateFile(path, (GENERIC_READ | GENERIC_WRITE), FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	HANDLE hFile = CreateFileA(path, (GENERIC_READ | GENERIC_WRITE), FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	size = GetFileSize(hFile, NULL);
 	HANDLE hMapFile;
 	hMapFile = CreateFileMapping(hFile, NULL, PAGE_READWRITE, 0, size, szFatHeaderMappingObject);
@@ -899,7 +899,7 @@ int main(int argc, char * argv[])
 				}
 				if (clip != 0)
 				{
-					HANDLE hFile = CreateFile(path, (GENERIC_READ | GENERIC_WRITE), FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+					HANDLE hFile = CreateFileA(path, (GENERIC_READ | GENERIC_WRITE), FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 					BOOL success = SetFileValidData(hFile, clip);
 					CloseHandle(hFile);
 				}				
@@ -908,7 +908,7 @@ int main(int argc, char * argv[])
 			FatHeader fat_header(Map(temp == NULL ? path : temp, !(flag_R || flag_T || flag_s || flag_S || flag_O || flag_D)));
 			struct linkedit_data_command *signature(NULL);
 			for each(FatMachHeader mach_header in fat_header.GetMachHeaders()) {
-				
+
 				for each (load_command* load_command in mach_header.GetLoadCommands()) {
 					uint32_t cmd(mach_header.Swap(load_command->cmd));
 
@@ -928,7 +928,7 @@ int main(int argc, char * argv[])
 								);
 						}
 					}
-					
+
 					else if (cmd == LC_ID_DYLIB) {
 						volatile struct dylib_command *dylib_command(reinterpret_cast<struct dylib_command *>(load_command));
 
@@ -960,9 +960,9 @@ int main(int argc, char * argv[])
 							printf("cryptid=0x%x\n", mach_header.Swap(encryption_info_command->cryptid));
 						}
 					}
-					
+
 				}
-				
+
 				if (flag_S) {
 					_assert(signature != NULL);
 					uint32_t data = mach_header.Swap(signature->dataoff);
@@ -1082,7 +1082,7 @@ int main(int argc, char * argv[])
 			++filee;
 			++filei;
 		}
-	}	
+	}
 
 	return 0;
 }
